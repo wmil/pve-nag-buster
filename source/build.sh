@@ -9,9 +9,7 @@ git_top=`git rev-parse --show-toplevel` 2>&1 ||
     }
 
 src_dir="$git_top/source"
-bld_dir="$git_top/build"
-dst="$bld_dir/install.sh"
-mkdir -p "$bld_dir"
+dst="$git_top/install.sh"
 
 create_file() {
     destination="$1"
