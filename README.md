@@ -1,68 +1,52 @@
 ## pve-nag-buster 
-https://github.com/foundObjects/pve-nag-buster
+
+This is a fork of [foundObjects/pve-nag-buster](https://github.com/foundObjects/pve-nag-buster). I've appreciated how set-and-forget it has been. Recently, I needed to apply a few updates to fit my own needs, but the main repository hasn't seen activity for a while. As a result, I've created this fork.
 
 `pve-nag-buster` is a dpkg hook script that persistently removes license nags
 from Proxmox VE 6.x and up. Install it once and you won't see another license
-nag until the Proxmox team  changes their web-ui code in a way that breaks the patch.
+nag until the Proxmox team changes their web-ui code in a way that breaks the patch.
 
 Please support the Proxmox team by [buying a subscription](https://www.proxmox.com/en/proxmox-ve/pricing) if it's within your
 means. High quality open source software like Proxmox needs our support!
 
 ### News:
 
-Last updated for: pve-manager/6.4-4/337d6701 (running kernel: 5.4.106-1-pve)
+Last Updates:
+- New build method and offline-only install script.
+- No-subscription repositories for Ceph ([divinity76](https://github.com/divinity76))
+- `pve-manager/6.4-4/337d6701` (running kernel: `5.4.106-1-pve`)
 
 ### How does it work?
 
-The included hook script removes the "unlicensed node" popup nag from the web
-gui and disables the pve-enterprise repository list. This script is called
-every time a package updates the web gui or the pve-enterprise source list and
+The included [hook script](https://raw.githubusercontent.com/wmil/pve-nag-buster/refs/heads/master/source/buster.sh)
+removes the "unlicensed node" popup nag from the web-ui and disables the enterprise repository lists.
+This script is called every time a package updates the web-ui or the enterprise source lists and
 will only run if packages containing those files are changed.
 
-The installer installs the dpkg hook script, adds the pve-no-subscription repo list
-and calls the hook script once. There are no external dependencies beyond the base
-packages installed with PVE by default.
+The installer
+installs the [dpkg hook script](https://raw.githubusercontent.com/wmil/pve-nag-buster/refs/heads/master/source/apt.conf.buster),
+adds the [pve-no-subscription](https://github.com/wmil/pve-nag-buster/blob/master/source/apt.list.pve)
+and [ceph-no-subscription](https://github.com/wmil/pve-nag-buster/blob/master/source/apt.list.ceph) repo lists
+and calls the hook script once.
+There are no external dependencies beyond the base packages installed with PVE by default.
 
 ### Installation
 ```sh
-wget https://raw.githubusercontent.com/foundObjects/pve-nag-buster/master/install.sh
+wget https://raw.githubusercontent.com/wmil/pve-nag-buster/master/install.sh
 
 # Always read scripts downloaded from the internet before running them with sudo
-sudo bash install.sh
-
-# or ..
 chmod +x install.sh && sudo ./install.sh
-```
-
-With Git:
-```sh
-git clone https://github.com/foundObjects/pve-nag-buster.git
-
-# Always read scripts downloaded from the internet before running them with sudo
-cd pve-nag-buster && sudo ./install.sh
 ```
 
 ### Uninstall:
 ```sh
 sudo ./install.sh --uninstall
-# remove /etc/apt/sources.list.d/pve-no-subscription.list if desired
+# remove /etc/apt/sources.list.d/{pve,ceph}-no-subscription.list if desired
 ```
-
-### Notes:
-
-#### Why is there base64 in my peanut-butter?
-
-For convenience the install script also contains a base64 encoded copy of the
-hook script, this makes installation possible without access to github or a
-full clone of the project directory.
-
-To inspect the base64 encoded script run `./install.sh --emit`; this dumps the
-encoded copy to stdout and quits. To install using the stored copy just run
-`sudo ./install.sh --offline`, no internet required.
 
 ### Thanks to:
 
-- John McLaren for his [blog post](https://www.reddit.com/user/seaqueue) documenting the web gui patch.
+- John McLaren for his [blog post](https://www.reddit.com/user/seaqueue) documenting the web-ui patch.
 - [Marlin Sööse](https://github.com/msoose) for the update for PVE 6.3+
 
 ### Contact:
